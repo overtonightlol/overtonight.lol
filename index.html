@@ -2,231 +2,703 @@
 <html lang="en">
 
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>overtonight</title>
+    <title>overtonight</title>
 
-<meta name="description" content="Where Overtonight's deepest, darkest secrets are kept.">
-<meta name="keywords" content="overtonight, ovt, tankboy, ghostboy">
-<meta name="robots" content="index, follow">
+    <meta name="description" content="Where Overtonight's deepest, darkest secrets are kept.">
+    <meta name="keywords" content="overtonight, ovt, tankboy, ghostboy">
+    <meta name="robots" content="index, follow">
 
-<meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
 
-<link rel="icon" type="image/png" href="images/ovticon.png">
+    <link rel="icon" type="image/png" href="images/icons/ovticon.png">
 
-<style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-html,
-body {
-    width: 100%;
-    min-height: 100%;
-}
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+        }
 
-body {
-    min-height: 100vh;
-    overflow: hidden;
-    background: #000;
-    font-family: Arial, sans-serif;
-    cursor: crosshair;
-}
-    
-.coming-soon {
-    position: fixed;
-    inset: 0;
-    z-index: 1;
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            background: #000;
+            font-family: Arial, sans-serif;
+            cursor: crosshair;
+        }
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+        /* =========================
+           ENTRY SPLASH SCREEN
+        ========================= */
 
-    color: #fff;
-    text-align: center;
+        .entry-splash {
+            position: fixed;
+            inset: 0;
+            z-index: 4000;
+            background: #000;
 
-    font-size: clamp(32px, 6vw, 64px);
-    letter-spacing: 8px;
-    text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-    user-select: none;
-    pointer-events: none;
-}
-    
-#sparkles {
-    position: fixed;
-    inset: 0;
-    z-index: 3000;
+            transition:
+                opacity 0.5s ease,
+                visibility 0.5s ease;
+        }
 
-    width: 100vw;
-    height: 100vh;
+        .entry-splash.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
 
-    pointer-events: none;
-}
-</style>
+        .enter-btn {
+            background: transparent;
+            color: #fff;
+            border: 2px solid #fff;
+
+            padding: 15px 30px;
+
+            font-size: 18px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+
+            cursor: pointer;
+
+            transition:
+                background 0.3s ease,
+                color 0.3s ease;
+        }
+
+        .enter-btn:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        /* =========================
+           SUPPORTERS DROPDOWN
+        ========================= */
+
+        .supporters-nav {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+
+            z-index: 3500;
+        }
+
+        .supporters-toggle {
+            appearance: none;
+
+            background: #000;
+            color: #fff;
+
+            border: 1px solid #fff;
+
+            padding: 12px 18px;
+
+            font-size: 14px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+
+            cursor: pointer;
+
+            transition:
+                background 0.2s ease,
+                color 0.2s ease;
+        }
+
+        .supporters-toggle:hover,
+        .supporters-toggle:focus-visible {
+            background: #fff;
+            color: #000;
+            outline: none;
+        }
+
+        .supporters-menu {
+            position: absolute;
+
+            top: calc(100% + 8px);
+            left: 0;
+
+            min-width: 220px;
+            max-height: 70vh;
+
+            overflow-y: auto;
+
+            background: #000;
+
+            border: 1px solid #fff;
+
+            display: none;
+        }
+
+        /*
+         * Opens the dropdown when hovering
+         * or focusing the Supporters button.
+         */
+        .supporters-nav:hover .supporters-menu,
+        .supporters-nav:focus-within .supporters-menu {
+            display: block;
+        }
+
+        .supporters-menu a {
+            display: block;
+
+            padding: 10px 14px;
+
+            color: #fff;
+            text-decoration: none;
+
+            font-size: 13px;
+            letter-spacing: 0.5px;
+
+            border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+
+            transition:
+                background 0.2s ease,
+                color 0.2s ease;
+        }
+
+        .supporters-menu a:last-child {
+            border-bottom: none;
+        }
+
+        .supporters-menu a:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        /* =========================
+           IMAGE MODAL
+        ========================= */
+
+        .image-modal-overlay {
+            position: fixed;
+            inset: 0;
+
+            z-index: 5000;
+
+            background: rgba(0, 0, 0, 0.85);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+
+            transition:
+                opacity 0.3s ease,
+                visibility 0.3s ease;
+        }
+
+        .image-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .expanded-image {
+            max-width: 90%;
+            max-height: 85vh;
+
+            object-fit: contain;
+
+            border-radius: 4px;
+
+            box-shadow:
+                0px 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        /* =========================
+           DASHBOARD
+        ========================= */
+
+        .dashboard-container {
+            position: relative;
+
+            z-index: 1;
+
+            width: 100%;
+            max-width: 1600px;
+
+            margin: 0 auto;
+            padding: 20px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(280px, 1fr));
+
+            gap: 20px;
+
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .dashboard-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .dashboard-card {
+            cursor: pointer;
+
+            overflow: hidden;
+
+            display: flex;
+            flex-direction: column;
+
+            transition: transform 0.2s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: scale(1.02);
+        }
+
+        .dashboard-card img {
+            width: 100%;
+            height: auto;
+
+            display: block;
+        }
+
+        /* =========================
+           SPARKLES
+        ========================= */
+
+        #sparkles {
+            position: fixed;
+            inset: 0;
+
+            z-index: 3000;
+
+            width: 100vw;
+            height: 100vh;
+
+            pointer-events: none;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 600px) {
+
+            .supporters-nav {
+                top: 12px;
+                left: 12px;
+            }
+
+            .supporters-toggle {
+                padding: 10px 14px;
+                font-size: 12px;
+            }
+
+            .supporters-menu {
+                min-width: 190px;
+            }
+
+        }
+    </style>
 
 </head>
 
 <body>
-    
-<div class="coming-soon">
-    coming soon
-</div>
 
-<canvas id="sparkles"></canvas>
+    <!-- =========================
+         SUPPORTERS DROPDOWN
+    ========================= -->
 
-<audio id="siteAudio" preload="auto" loop>
-    <source src="audio/hotel_room.mp3" type="audio/mp3">
-</audio>
+    <nav class="supporters-nav" aria-label="Supporters">
 
-<script>
+        <button
+            class="supporters-toggle"
+            type="button"
+            aria-haspopup="true"
+        >
+            Supporters ▾
+        </button>
 
-const AUDIO_VOLUME = 0.1;
-const AUDIO_START_TIME = 0;
+        <div class="supporters-menu">
 
-const audio = document.getElementById("siteAudio");
+            <a href="/supporters">
+                All Supporters
+            </a>
 
-audio.volume = AUDIO_VOLUME;
-audio.currentTime = AUDIO_START_TIME;
+            <a href="/supporters#exc">
+                Exc
+            </a>
 
-let musicStarted = false;
+            <a href="/supporters#bean">
+                Bean
+            </a>
 
-function startMusic() {
+            <a href="/supporters#ghostboy">
+                Ghostboy
+            </a>
 
-    if (musicStarted) return;
+            <a href="/supporters#trippy">
+                Trippy
+            </a>
 
-    audio.currentTime = AUDIO_START_TIME;
-    audio.volume = AUDIO_VOLUME;
+            <a href="/supporters#vyre">
+                Vyre
+            </a>
 
-    audio.play()
-        .then(() => {
+            <a href="/supporters#zenotalkk">
+                Zenotalkk
+            </a>
 
-            musicStarted = true;
+            <a href="/supporters#sal">
+                Sal
+            </a>
 
-            window.removeEventListener("mousemove", startMusic);
+            <a href="/supporters#leo">
+                Leo
+            </a>
 
-        })
-        .catch(error => {
+            <a href="/supporters#jammy">
+                Jammy
+            </a>
 
-            console.log("Audio could not start:", error);
+            <a href="/supporters#hxtx">
+                Hxtx
+            </a>
+
+            <a href="/supporters#issac">
+                Issac
+            </a>
+
+            <a href="/supporters#marteey">
+                Marteey
+            </a>
+
+            <a href="/supporters#maserr">
+                Maserr
+            </a>
+
+            <a href="/supporters#neo">
+                Neo
+            </a>
+
+            <a href="/supporters#izzu">
+                Izzu
+            </a>
+
+            <a href="/supporters#bella">
+                Bella
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================
+         IMAGE MODAL
+    ========================= -->
+
+    <div
+        class="image-modal-overlay"
+        id="imageModal"
+    >
+
+        <img
+            src=""
+            alt="Expanded View"
+            class="expanded-image"
+            id="expandedImg"
+        >
+
+    </div>
+
+
+    <!-- =========================
+         ENTRY SCREEN
+    ========================= -->
+
+    <div
+        class="entry-splash"
+        id="splashScreen"
+    >
+
+        <button
+            class="enter-btn"
+            id="enterButton"
+        >
+            Enter Ghost Territories
+        </button>
+
+    </div>
+
+
+    <!-- =========================
+         MAIN CONTENT
+         
+         Your supporter images are
+         intentionally NOT here.
+         
+         They are now on /supporters.
+    ========================= -->
+
+    <main class="dashboard-container">
+    </main>
+
+
+    <!-- =========================
+         SPARKLES
+    ========================= -->
+
+    <canvas id="sparkles"></canvas>
+
+
+    <!-- =========================
+         AUDIO
+    ========================= -->
+
+    <audio
+        id="siteAudio"
+        preload="auto"
+        loop
+    >
+
+        <source
+            src="audio/songs/hotel_room.mp3"
+            type="audio/mp3"
+        >
+
+    </audio>
+
+
+    <script>
+
+        /* =========================
+           AUDIO
+        ========================= */
+
+        const AUDIO_VOLUME = 0.1;
+        const AUDIO_START_TIME = 0;
+
+        const audio =
+            document.getElementById("siteAudio");
+
+        const splashScreen =
+            document.getElementById("splashScreen");
+
+        const enterButton =
+            document.getElementById("enterButton");
+
+
+        audio.volume = AUDIO_VOLUME;
+        audio.currentTime = AUDIO_START_TIME;
+
+
+        enterButton.addEventListener("click", () => {
+
+            splashScreen.classList.add("hidden");
+
+            audio.currentTime = AUDIO_START_TIME;
+            audio.volume = AUDIO_VOLUME;
+
+            audio.play().catch(error => {
+
+                console.log(
+                    "Audio could not start playback:",
+                    error
+                );
+
+            });
 
         });
 
-}
 
-window.addEventListener("mousemove", startMusic);
-    
-const canvas = document.getElementById("sparkles");
-const ctx = canvas.getContext("2d");
+        /* =========================
+           SPARKLE CURSOR
+        ========================= */
 
-const sparkleImage = new Image();
+        const canvas =
+            document.getElementById("sparkles");
 
-sparkleImage.src = "images/ovtcursor.png";
+        const ctx =
+            canvas.getContext("2d");
 
-let particles = [];
 
-function resizeCanvas() {
+        const sparkleImage =
+            new Image();
 
-    canvas.width = innerWidth;
-    canvas.height = innerHeight;
+        sparkleImage.src =
+            "images/icons/ovtcursor.png";
 
-}
 
-window.addEventListener("resize", resizeCanvas);
+        let particles = [];
 
-resizeCanvas();
 
-window.addEventListener("mousemove", e => {
+        function resizeCanvas() {
 
-    for (let i = 0; i < 1; i++) {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
 
-        particles.push({
-
-            x: e.clientX,
-            y: e.clientY,
-
-            size: 10 + Math.random() * 10,
-
-            vx: (Math.random() - .5) * 1.5,
-
-            vy: (Math.random() - .5) * 1.5,
-
-            life: 1,
-
-            decay: Math.random() * .03 + .015,
-
-            rotation: Math.random() * Math.PI * 2,
-
-            spin: (Math.random() - .5) * .05
-
-        });
-
-    }
-
-});
-
-function animate() {
-
-    ctx.clearRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
-
-    particles = particles.filter(p => {
-
-        p.x += p.vx;
-        p.y += p.vy;
-
-        p.life -= p.decay;
-
-        p.rotation += p.spin;
-
-        if (p.life <= 0) {
-            return false;
         }
 
-        if (
-            sparkleImage.complete &&
-            sparkleImage.naturalWidth
-        ) {
 
-            ctx.save();
+        window.addEventListener(
+            "resize",
+            resizeCanvas
+        );
 
-            ctx.globalAlpha = p.life;
 
-            ctx.translate(
-                p.x,
-                p.y
+        resizeCanvas();
+
+
+        window.addEventListener(
+            "mousemove",
+            event => {
+
+                for (
+                    let i = 0;
+                    i < 1;
+                    i++
+                ) {
+
+                    particles.push({
+
+                        x: event.clientX,
+                        y: event.clientY,
+
+                        size:
+                            10 +
+                            Math.random() * 10,
+
+                        vx:
+                            (Math.random() - 0.5) *
+                            1.5,
+
+                        vy:
+                            (Math.random() - 0.5) *
+                            1.5,
+
+                        life: 1,
+
+                        decay:
+                            Math.random() * 0.03 +
+                            0.015,
+
+                        rotation:
+                            Math.random() *
+                            Math.PI *
+                            2,
+
+                        spin:
+                            (Math.random() - 0.5) *
+                            0.05
+
+                    });
+
+                }
+
+            }
+        );
+
+
+        /* =========================
+           ANIMATION
+        ========================= */
+
+        function animate() {
+
+            ctx.clearRect(
+                0,
+                0,
+                canvas.width,
+                canvas.height
             );
 
-            ctx.rotate(p.rotation);
 
-            ctx.drawImage(
-                sparkleImage,
-                -p.size,
-                -p.size,
-                p.size,
-                p.size
+            particles =
+                particles.filter(p => {
+
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    p.life -= p.decay;
+
+                    p.rotation += p.spin;
+
+
+                    if (p.life <= 0) {
+
+                        return false;
+
+                    }
+
+
+                    if (
+                        sparkleImage.complete &&
+                        sparkleImage.naturalWidth
+                    ) {
+
+                        ctx.save();
+
+                        ctx.globalAlpha =
+                            p.life;
+
+
+                        ctx.translate(
+                            p.x,
+                            p.y
+                        );
+
+
+                        ctx.rotate(
+                            p.rotation
+                        );
+
+
+                        ctx.drawImage(
+
+                            sparkleImage,
+
+                            -p.size,
+                            -p.size,
+
+                            p.size,
+                            p.size
+
+                        );
+
+
+                        ctx.restore();
+
+                    }
+
+
+                    return true;
+
+                });
+
+
+            requestAnimationFrame(
+                animate
             );
 
-            ctx.restore();
         }
 
-        return true;
 
-    });
+        animate();
 
-    requestAnimationFrame(animate);
-}
-
-animate();
-
-</script>
+    </script>
 
 </body>
+
 </html>
