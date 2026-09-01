@@ -1,0 +1,334 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>overtonight</title>
+
+<link rel="icon" href="images/ovticon.png">
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    overflow: hidden;
+    background: #000;
+    font-family: Arial, sans-serif;
+    cursor: crosshair;
+}
+
+/* =========================
+   COMING SOON
+   ========================= */
+
+.coming-soon {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #fff;
+    text-align: center;
+
+    font-size: clamp(32px, 6vw, 64px);
+    letter-spacing: 8px;
+    text-transform: uppercase;
+
+    user-select: none;
+    pointer-events: none;
+}
+
+/* =========================
+   VIEW PEAK SCREEN
+   ========================= */
+
+#viewPeak {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, .32);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    transition: opacity .45s, visibility .45s;
+}
+
+#viewPeak.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.view-peak-box {
+    padding: 24px 34px;
+    text-align: center;
+
+    background: rgba(255, 255, 255, .72);
+    border: 1px solid rgba(255, 255, 255, .45);
+    border-radius: 16px;
+
+    box-shadow: 0 18px 60px rgba(0, 0, 0, .35);
+}
+
+.view-peak-box h2 {
+    color: #111;
+    font-size: 28px;
+    letter-spacing: 4px;
+}
+
+.view-peak-box p {
+    margin-top: 8px;
+    color: #444;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+/* =========================
+   SPARKLE CURSOR
+   ========================= */
+
+#sparkles {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+
+    width: 100vw;
+    height: 100vh;
+
+    pointer-events: none;
+}
+</style>
+
+</head>
+
+<body class="locked">
+
+<!-- Click anywhere to enter -->
+
+<div id="viewPeak" role="button" tabindex="0" aria-label="Enter site">
+    <div class="view-peak-box">
+        <h2>view peak</h2>
+        <p>click anywhere to enter</p>
+    </div>
+</div>
+
+<!-- Coming Soon -->
+
+<div class="coming-soon">
+    coming soon
+</div>
+
+<!-- Cursor Effect -->
+
+<canvas id="sparkles"></canvas>
+
+<!-- Music -->
+
+<audio id="siteAudio" preload="auto" loop>
+    <source src="hotel_room.mp3" type="audio/mp3">
+</audio>
+
+
+<script>
+
+/* =========================
+   AUDIO SETTINGS
+   ========================= */
+
+const AUDIO_FILE = "hotel_room.mp3";
+const AUDIO_VOLUME = 0.1;
+const AUDIO_START_TIME = 0;
+
+
+/* =========================
+   VIEW PEAK
+   ========================= */
+
+const viewPeak = document.getElementById("viewPeak");
+
+function enterSite() {
+
+    document.body.classList.remove("locked");
+
+    viewPeak.classList.add("hidden");
+
+    const audio = document.getElementById("siteAudio");
+
+    audio.src = AUDIO_FILE;
+    audio.volume = AUDIO_VOLUME;
+    audio.currentTime = AUDIO_START_TIME;
+
+    audio.play().catch(error => {
+        console.log("Audio could not start:", error);
+    });
+
+    setTimeout(() => viewPeak.remove(), 500);
+}
+
+viewPeak.addEventListener("click", enterSite);
+
+viewPeak.addEventListener("keydown", e => {
+
+    if (e.key === "Enter" || e.key === " ") {
+
+        e.preventDefault();
+
+        enterSite();
+    }
+
+});
+
+
+/* =========================
+   SPARKLE CURSOR
+   ========================= */
+
+const canvas = document.getElementById("sparkles");
+const ctx = canvas.getContext("2d");
+
+const sparkleImage = new Image();
+
+sparkleImage.src = "images/ovtcursor.png";
+
+let particles = [];
+
+
+/* =========================
+   CANVAS SIZE
+   ========================= */
+
+function resizeCanvas() {
+
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+
+}
+
+window.addEventListener("resize", resizeCanvas);
+
+resizeCanvas();
+
+
+/* =========================
+   CURSOR PARTICLES
+   ========================= */
+
+window.addEventListener("mousemove", e => {
+
+    for (let i = 0; i < 1; i++) {
+
+        particles.push({
+
+            x: e.clientX,
+            y: e.clientY,
+
+            size: 10 + Math.random() * 10,
+
+            vx: (Math.random() - .5) * 1.5,
+
+            vy: (Math.random() - .5) * 1.5,
+
+            life: 1,
+
+            decay: Math.random() * .03 + .015,
+
+            rotation: Math.random() * Math.PI * 2,
+
+            spin: (Math.random() - .5) * .05
+
+        });
+
+    }
+
+});
+
+
+/* =========================
+   ANIMATE PARTICLES
+   ========================= */
+
+function animate() {
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    particles = particles.filter(p => {
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        p.life -= p.decay;
+
+        p.rotation += p.spin;
+
+        if (p.life <= 0) {
+            return false;
+        }
+
+        if (
+            sparkleImage.complete &&
+            sparkleImage.naturalWidth
+        ) {
+
+            ctx.save();
+
+            ctx.globalAlpha = p.life;
+
+            ctx.translate(
+                p.x,
+                p.y
+            );
+
+            ctx.rotate(p.rotation);
+
+            ctx.drawImage(
+                sparkleImage,
+                -p.size / 1,
+                -p.size / 1,
+                p.size,
+                p.size
+            );
+
+            ctx.restore();
+        }
+
+        return true;
+
+    });
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+</script>
+
+</body>
+</html>
+```
