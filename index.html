@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>overtonight</title>
-<meta name="description" content="Overtonight's Deepest Darkest Secrets...">
+
+<meta name="description" content="where overtonights darkest secrets are held">
 <meta name="keywords" content="overtonight, ovt, tankboy, ghostboy">
 <meta name="robots" content="index, follow">
-
 
 <!-- Custom Website Icon -->
 <link rel="icon" type="image/png" href="ovticon.png">
@@ -108,29 +109,32 @@ const audio = document.getElementById("siteAudio");
 audio.volume = AUDIO_VOLUME;
 audio.currentTime = AUDIO_START_TIME;
 
-/*
-   Browsers may block autoplay with sound.
-   If blocked, the first user interaction
-   will start the music.
-*/
+let musicStarted = false;
 
-audio.play().catch(() => {
+function startMusic() {
 
-    const startAudio = () => {
+    if (musicStarted) return;
 
-        audio.play().catch(() => {});
+    audio.currentTime = AUDIO_START_TIME;
+    audio.volume = AUDIO_VOLUME;
 
-        document.removeEventListener("click", startAudio);
-        document.removeEventListener("mousemove", startAudio);
-        document.removeEventListener("keydown", startAudio);
+    audio.play()
+        .then(() => {
 
-    };
+            musicStarted = true;
 
-    document.addEventListener("click", startAudio);
-    document.addEventListener("mousemove", startAudio);
-    document.addEventListener("keydown", startAudio);
+            window.removeEventListener("mousemove", startMusic);
 
-});
+        })
+        .catch(error => {
+
+            console.log("Audio could not start:", error);
+
+        });
+
+}
+
+window.addEventListener("mousemove", startMusic);
 
 
 /* =========================
