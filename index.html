@@ -1,14 +1,17 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>overtonight</title>
+<meta name="description" content="Overtonight's Deepest Darkest Secrets...">
+<meta name="keywords" content="overtonight, ovt, tankboy, ghostboy">
+<meta name="robots" content="index, follow">
 
-<link rel="icon" href="images/ovticon.png">
+
+<!-- Custom Website Icon -->
+<link rel="icon" type="image/png" href="images/ovticon.png">
 
 <style>
 * {
@@ -56,56 +59,6 @@ body {
 }
 
 /* =========================
-   VIEW PEAK SCREEN
-   ========================= */
-
-#viewPeak {
-    position: fixed;
-    inset: 0;
-    z-index: 2000;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: rgba(0, 0, 0, .32);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-
-    transition: opacity .45s, visibility .45s;
-}
-
-#viewPeak.hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-}
-
-.view-peak-box {
-    padding: 24px 34px;
-    text-align: center;
-
-    background: rgba(255, 255, 255, .72);
-    border: 1px solid rgba(255, 255, 255, .45);
-    border-radius: 16px;
-
-    box-shadow: 0 18px 60px rgba(0, 0, 0, .35);
-}
-
-.view-peak-box h2 {
-    color: #111;
-    font-size: 28px;
-    letter-spacing: 4px;
-}
-
-.view-peak-box p {
-    margin-top: 8px;
-    color: #444;
-    font-size: 12px;
-    letter-spacing: 1px;
-}
-
-/* =========================
    SPARKLE CURSOR
    ========================= */
 
@@ -123,16 +76,7 @@ body {
 
 </head>
 
-<body class="locked">
-
-<!-- Click anywhere to enter -->
-
-<div id="viewPeak" role="button" tabindex="0" aria-label="Enter site">
-    <div class="view-peak-box">
-        <h2>view peak</h2>
-        <p>click anywhere to enter</p>
-    </div>
-</div>
+<body>
 
 <!-- Coming Soon -->
 
@@ -150,53 +94,41 @@ body {
     <source src="hotel_room.mp3" type="audio/mp3">
 </audio>
 
-
 <script>
 
 /* =========================
    AUDIO SETTINGS
    ========================= */
 
-const AUDIO_FILE = "hotel_room.mp3";
 const AUDIO_VOLUME = 0.1;
 const AUDIO_START_TIME = 0;
 
+const audio = document.getElementById("siteAudio");
 
-/* =========================
-   VIEW PEAK
-   ========================= */
+audio.volume = AUDIO_VOLUME;
+audio.currentTime = AUDIO_START_TIME;
 
-const viewPeak = document.getElementById("viewPeak");
+/*
+   Browsers may block autoplay with sound.
+   If blocked, the first user interaction
+   will start the music.
+*/
 
-function enterSite() {
+audio.play().catch(() => {
 
-    document.body.classList.remove("locked");
+    const startAudio = () => {
 
-    viewPeak.classList.add("hidden");
+        audio.play().catch(() => {});
 
-    const audio = document.getElementById("siteAudio");
+        document.removeEventListener("click", startAudio);
+        document.removeEventListener("mousemove", startAudio);
+        document.removeEventListener("keydown", startAudio);
 
-    audio.src = AUDIO_FILE;
-    audio.volume = AUDIO_VOLUME;
-    audio.currentTime = AUDIO_START_TIME;
+    };
 
-    audio.play().catch(error => {
-        console.log("Audio could not start:", error);
-    });
-
-    setTimeout(() => viewPeak.remove(), 500);
-}
-
-viewPeak.addEventListener("click", enterSite);
-
-viewPeak.addEventListener("keydown", e => {
-
-    if (e.key === "Enter" || e.key === " ") {
-
-        e.preventDefault();
-
-        enterSite();
-    }
+    document.addEventListener("click", startAudio);
+    document.addEventListener("mousemove", startAudio);
+    document.addEventListener("keydown", startAudio);
 
 });
 
@@ -309,8 +241,8 @@ function animate() {
 
             ctx.drawImage(
                 sparkleImage,
-                -p.size / 1,
-                -p.size / 1,
+                -p.size,
+                -p.size,
                 p.size,
                 p.size
             );
@@ -331,4 +263,3 @@ animate();
 
 </body>
 </html>
-```
