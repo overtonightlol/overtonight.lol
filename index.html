@@ -13,7 +13,7 @@
 
 <meta name="theme-color" content="#ffffff">
 
-<link rel="icon" type="image/png" href="ovticon.png">
+<link rel="icon" type="image/png" href="images/ovticon.png">
 
 <style>
 * {
@@ -35,11 +35,7 @@ body {
     font-family: Arial, sans-serif;
     cursor: crosshair;
 }
-
-/* =========================
-   COMING SOON
-   ========================= */
-
+    
 .coming-soon {
     position: fixed;
     inset: 0;
@@ -59,11 +55,7 @@ body {
     user-select: none;
     pointer-events: none;
 }
-
-/* =========================
-   SPARKLE CURSOR
-   ========================= */
-
+    
 #sparkles {
     position: fixed;
     inset: 0;
@@ -79,28 +71,18 @@ body {
 </head>
 
 <body>
-
-<!-- Coming Soon -->
-
+    
 <div class="coming-soon">
     coming soon
 </div>
 
-<!-- Cursor Effect -->
-
 <canvas id="sparkles"></canvas>
 
-<!-- Music -->
-
 <audio id="siteAudio" preload="auto" loop>
-    <source src="hotel_room.mp3" type="audio/mp3">
+    <source src="audio/hotel_room.mp3" type="audio/mp3">
 </audio>
 
 <script>
-
-/* =========================
-   AUDIO SETTINGS
-   ========================= */
 
 const AUDIO_VOLUME = 0.1;
 const AUDIO_START_TIME = 0;
@@ -136,25 +118,15 @@ function startMusic() {
 }
 
 window.addEventListener("mousemove", startMusic);
-
-
-/* =========================
-   SPARKLE CURSOR
-   ========================= */
-
+    
 const canvas = document.getElementById("sparkles");
 const ctx = canvas.getContext("2d");
 
 const sparkleImage = new Image();
 
-sparkleImage.src = "ovtcursor.png";
+sparkleImage.src = "images/ovtcursor.png";
 
 let particles = [];
-
-
-/* =========================
-   CANVAS SIZE
-   ========================= */
 
 function resizeCanvas() {
 
@@ -166,11 +138,6 @@ function resizeCanvas() {
 window.addEventListener("resize", resizeCanvas);
 
 resizeCanvas();
-
-
-/* =========================
-   CURSOR PARTICLES
-   ========================= */
 
 window.addEventListener("mousemove", e => {
 
@@ -200,11 +167,6 @@ window.addEventListener("mousemove", e => {
     }
 
 });
-
-
-/* =========================
-   ANIMATE PARTICLES
-   ========================= */
 
 function animate() {
 
