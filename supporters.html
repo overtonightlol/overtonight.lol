@@ -291,6 +291,40 @@
 
         }
 
+    
+        /* =========================
+           SHARED SITE NAVIGATION
+        ========================= */
+        .site-nav {
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 5000;
+        }
+        .nav-toggle {
+            appearance: none;
+            background: rgba(0,0,0,.78);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,.8);
+            padding: 11px 15px;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            backdrop-filter: blur(12px);
+            cursor: pointer;
+            transition: .2s;
+        }
+        .nav-toggle:hover,.nav-toggle:focus-visible { background:#fff; color:#000; outline:none; }
+        .nav-menu {
+            position:absolute; top:calc(100% + 7px); left:0; width:220px; display:none;
+            background:rgba(0,0,0,.92); border:1px solid rgba(255,255,255,.35);
+            backdrop-filter:blur(18px); box-shadow:0 20px 60px rgba(0,0,0,.5);
+        }
+        .site-nav:hover .nav-menu,.site-nav:focus-within .nav-menu,.site-nav.open .nav-menu { display:block; }
+        .nav-menu a { display:block; padding:13px 15px; color:#fff; text-decoration:none; font-size:11px; letter-spacing:1.3px; text-transform:uppercase; border-bottom:1px solid rgba(255,255,255,.10); transition:.2s; }
+        .nav-menu a:last-child { border-bottom:0; }
+        .nav-menu a:hover,.nav-menu a.active { background:#fff; color:#000; }
+
     </style>
 
 </head>
@@ -322,6 +356,17 @@
          HEADER
     ========================= -->
 
+<nav class="site-nav" aria-label="Site navigation">
+        <button class="nav-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+            Navigate ▾
+        </button>
+        <div class="nav-menu">
+            <a href="/">Home</a>
+            <a href="/biography">Biography</a>
+            <a href="/supporters" class="active">Supporters</a>
+        </div>
+    </nav>
+
     <header class="supporters-header">
 
         <h1>
@@ -329,12 +374,7 @@
         </h1>
 
 
-        <a
-            href="/"
-            class="home-link"
-        >
-            ← Home
-        </a>
+
 
     </header>
 
@@ -859,6 +899,24 @@
         >
     </audio>
 
+
+    <script>
+    const navToggle = document.querySelector(".nav-toggle");
+    const siteNav = document.querySelector(".site-nav");
+    if (navToggle && siteNav) {
+        navToggle.addEventListener("click", () => {
+            const open = navToggle.getAttribute("aria-expanded") === "true";
+            navToggle.setAttribute("aria-expanded", String(!open));
+            siteNav.classList.toggle("open", !open);
+        });
+        document.addEventListener("click", (event) => {
+            if (!siteNav.contains(event.target)) {
+                navToggle.setAttribute("aria-expanded", "false");
+                siteNav.classList.remove("open");
+            }
+        });
+    }
+    </script>
 </body>
 
 </html>
