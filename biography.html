@@ -237,24 +237,125 @@ button{cursor:pointer}
 
 /* MOBILE */
 @media(max-width:800px){
-  html,body{overflow:hidden}
-  .bio-app{padding:62px 10px 10px}
-  .bio-shell{height:calc(100vh - 72px);grid-template-columns:1fr}
-  .sidebar{height:112px;border-right:0;border-bottom:1px solid rgba(255,255,255,.12);padding:9px 10px;overflow-x:auto}
-  .brand{display:none}
-  .section-label{display:none}
-  .side-btn{width:auto;display:inline-block;white-space:nowrap;margin:0 3px 0 0;padding:9px 11px}
-  .side-footer{display:none}
-  .content-top{min-height:53px;padding:14px 18px}
-  .view{padding:25px 20px}
-  .hero-grid{grid-template-columns:1fr}
-  .collabs{grid-template-columns:repeat(2,1fr)}
+  html,body{height:auto;min-height:100%;overflow-x:hidden;overflow-y:auto}
+  body{background-attachment:scroll}
+  .site-nav{top:10px;left:10px}
+  .nav-toggle{padding:10px 12px;font-size:10px}
+  .nav-menu{top:calc(100% + 5px);width:200px}
+
+  .bio-app{
+    width:100%;
+    min-height:100vh;
+    height:auto;
+    padding:58px 8px 12px;
+    display:block;
+  }
+
+  .bio-shell{
+    width:100%;
+    height:auto;
+    min-height:0;
+    border-radius:12px;
+    display:flex;
+    flex-direction:column;
+    overflow:visible;
+  }
+
+  .sidebar{
+    width:100%;
+    height:auto;
+    min-height:0;
+    flex:none;
+    border-right:0;
+    border-bottom:1px solid rgba(255,255,255,.12);
+    padding:8px;
+    display:flex;
+    flex-direction:row;
+    gap:5px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .sidebar::-webkit-scrollbar{display:none}
+  .brand,.section-label,.side-footer{display:none}
+  .side-btn{
+    width:auto;
+    flex:0 0 auto;
+    display:block;
+    white-space:nowrap;
+    margin:0;
+    padding:9px 10px;
+    font-size:10px;
+  }
+
+  .content{width:100%;min-height:0;display:flex}
+  .content-top{
+    min-height:48px;
+    padding:12px 14px;
+    gap:12px;
+  }
+  .crumb{font-size:7px;letter-spacing:2px}
+  .status{font-size:7px;letter-spacing:1px;white-space:nowrap}
+
+  .views{
+    position:relative;
+    min-height:0;
+    height:auto;
+  }
+  .view{
+    position:relative;
+    inset:auto;
+    display:none;
+    padding:24px 16px 32px;
+    overflow:visible;
+    min-height:0;
+  }
+  .view.active{display:block}
+
+  .view h2{
+    font-size:clamp(29px,9vw,40px);
+    line-height:1.05;
+    letter-spacing:-1.5px;
+    overflow-wrap:anywhere;
+    margin:9px 0 18px;
+  }
+  .lede,.copy{
+    max-width:none;
+    font-size:13px;
+    line-height:1.7;
+  }
+
+  .hero-grid,.card-grid,.track-grid,.collabs{
+    grid-template-columns:1fr;
+    max-width:none;
+    width:100%;
+  }
+  .intro-card,.stat-card,.mini-card,.collab{padding:15px}
+  .stat-card{grid-template-columns:1fr 1fr;gap:7px}
+  .stat{padding:11px}
+  .stat strong{font-size:12px}
+  .timeline{margin:20px 0;padding-left:20px}
+  .t-row:before{left:-25px}
+  .release-tabs{gap:6px}
+  .release-tab{padding:8px 10px;font-size:8px}
+  .track{font-size:11px;padding:12px}
+  .tags{gap:6px}
+  .tag{padding:6px 8px}
+  .source{max-width:none;font-size:10px;padding:12px}
 }
+
 @media(max-width:520px){
-  .card-grid,.track-grid{grid-template-columns:1fr}
-  .collabs{grid-template-columns:1fr 1fr}
-  .view h2{font-size:35px}
-  .nav-menu{width:190px}
+  .stat-card{grid-template-columns:1fr}
+  .collabs{grid-template-columns:1fr}
+  .content-top{align-items:flex-start}
+  .status i{margin-right:4px}
+  .spotify-modal{padding:8px}
+  .spotify-modal-box{width:100%;max-height:90vh}
+  .spotify-embed-wrap{padding:12px}
+  .spotify-hint{padding:0 12px 14px}
+  .collab-modal{padding:8px}
+  .collab-modal-box{width:100%;max-height:90vh}
 }
 </style>
 </head>
@@ -301,13 +402,15 @@ button{cursor:pointer}
 
 
 <nav class="site-nav" aria-label="Site navigation">
-  <button class="nav-toggle">Navigate ▾</button>
-  <div class="nav-menu">
-    <a href="/">Home</a>
-    <a href="/biography" class="active">Biography</a>
-    <a href="/supporters">Supporters</a>
-  </div>
-</nav>
+        <button class="nav-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+            Navigate ▾
+        </button>
+        <div class="nav-menu">
+            <a href="/">Home</a>
+            <a href="/biography" class="active">Biography</a>
+            <a href="/supporters">Supporters</a>
+        </div>
+    </nav>
 
 <main class="bio-app">
   <section class="bio-shell">
@@ -763,5 +866,23 @@ releaseTabs.forEach(tab => {
   });
 });
 </script>
+
+    <script>
+    const navToggle = document.querySelector(".nav-toggle");
+    const siteNav = document.querySelector(".site-nav");
+    if (navToggle && siteNav) {
+        navToggle.addEventListener("click", () => {
+            const open = navToggle.getAttribute("aria-expanded") === "true";
+            navToggle.setAttribute("aria-expanded", String(!open));
+            siteNav.classList.toggle("open", !open);
+        });
+        document.addEventListener("click", (event) => {
+            if (!siteNav.contains(event.target)) {
+                navToggle.setAttribute("aria-expanded", "false");
+                siteNav.classList.remove("open");
+            }
+        });
+    }
+    </script>
 </body>
 </html>
