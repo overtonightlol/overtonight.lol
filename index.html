@@ -83,99 +83,91 @@
             background: #fff;
             color: #000;
         }
-
         /* =========================
-           SUPPORTERS DROPDOWN
+           SHARED SITE NAVIGATION
         ========================= */
 
-        .supporters-nav {
+        .site-nav {
             position: fixed;
-            top: 20px;
-            left: 20px;
-
-            z-index: 3500;
+            top: 18px;
+            left: 18px;
+            z-index: 5000;
         }
 
-        .supporters-toggle {
+        .nav-toggle {
             appearance: none;
-
-            background: #000;
+            background: rgba(0,0,0,.78);
             color: #fff;
-
-            border: 1px solid #fff;
-
-            padding: 12px 18px;
-
-            font-size: 14px;
-            letter-spacing: 1.5px;
+            border: 1px solid rgba(255,255,255,.8);
+            padding: 11px 15px;
+            font-size: 11px;
+            letter-spacing: 2px;
             text-transform: uppercase;
-
+            backdrop-filter: blur(12px);
             cursor: pointer;
-
-            transition:
-                background 0.2s ease,
-                color 0.2s ease;
+            transition: .2s;
         }
 
-        .supporters-toggle:hover,
-        .supporters-toggle:focus-visible {
+        .nav-toggle:hover,
+        .nav-toggle:focus-visible {
             background: #fff;
             color: #000;
             outline: none;
         }
 
-        .supporters-menu {
+        .nav-menu {
             position: absolute;
-
-            top: calc(100% + 8px);
+            top: calc(100% + 7px);
             left: 0;
-
-            min-width: 220px;
-            max-height: 70vh;
-
-            overflow-y: auto;
-
-            background: #000;
-
-            border: 1px solid #fff;
-
+            width: 220px;
             display: none;
+            background: rgba(0,0,0,.92);
+            border: 1px solid rgba(255,255,255,.35);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 20px 60px rgba(0,0,0,.5);
         }
 
-        /*
-         * Opens the dropdown when hovering
-         * or focusing the Supporters button.
-         */
-        .supporters-nav:hover .supporters-menu,
-        .supporters-nav:focus-within .supporters-menu {
+        .site-nav:hover .nav-menu,
+        .site-nav:focus-within .nav-menu {
             display: block;
         }
 
-        .supporters-menu a {
+        .nav-menu a {
             display: block;
-
-            padding: 10px 14px;
-
+            padding: 13px 15px;
             color: #fff;
             text-decoration: none;
-
-            font-size: 13px;
-            letter-spacing: 0.5px;
-
-            border-bottom: 1px solid rgba(255, 255, 255, 0.18);
-
-            transition:
-                background 0.2s ease,
-                color 0.2s ease;
+            font-size: 11px;
+            letter-spacing: 1.3px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255,255,255,.10);
+            transition: .2s;
         }
 
-        .supporters-menu a:last-child {
-            border-bottom: none;
+        .nav-menu a:last-child {
+            border-bottom: 0;
         }
 
-        .supporters-menu a:hover {
+        .nav-menu a:hover,
+        .nav-menu a.active {
             background: #fff;
             color: #000;
+        }
+
+        @media (max-width: 600px) {
+            .site-nav {
+                top: 12px;
+                left: 12px;
+            }
+
+            .nav-toggle {
+                padding: 10px 14px;
+                font-size: 10px;
+            }
+
+            .nav-menu {
+                width: 190px;
+            }
         }
 
         /* =========================
@@ -315,28 +307,19 @@
 </head>
 
 <body>
-
     <!-- =========================
-         SUPPORTERS DROPDOWN
+         SHARED SITE NAVIGATION
     ========================= -->
 
-    <nav class="supporters-nav" aria-label="Supporters">
-
-        <button
-            class="supporters-toggle"
-            type="button"
-            aria-haspopup="true"
-        >
-            Supporters ▾
+    <nav class="site-nav" aria-label="Site navigation">
+        <button class="nav-toggle" type="button" aria-haspopup="true">
+            Navigate ▾
         </button>
-
-        <div class="supporters-menu">
-
-            <a href="/supporters">
-                All Supporters
-            </a>
+        <div class="nav-menu">
+            <a href="/" class="active">Home</a>
+            <a href="/biography">Biography</a>
+            <a href="/supporters">Supporters</a>
         </div>
-
     </nav>
 
 
