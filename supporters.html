@@ -358,6 +358,18 @@
             >
 
         </article>
+        <article
+            class="supporter-card"
+            id="issaclv"
+        >
+
+            <img
+                src="images/mentions/issaclovesovt.png"
+                alt="Issaclovesovt supporter"
+                loading="lazy"
+            >
+
+        </article>
 
 
         <article
@@ -466,6 +478,126 @@
             <img
                 src="images/mentions/jammy.png"
                 alt="Jammy supporter"
+                loading="lazy"
+            >
+
+        </article>
+        <article
+            class="supporter-card"
+            id="issac"
+        >
+
+            <img
+                src="images/mentions/issac2.png"
+                alt="Issac supporter"
+                loading="lazy"
+            >
+
+        </article>
+        <article
+            class="supporter-card"
+            id="bush"
+        >
+
+            <img
+                src="images/mentions/bush.png"
+                alt="Bush supporter"
+                loading="lazy"
+            >
+
+        </article>
+        <article
+            class="supporter-card"
+            id="ry4n"
+        >
+
+            <img
+                src="images/mentions/ry4n.png"
+                alt="R4yn supporter"
+                loading="lazy"
+            >
+
+        </article>
+        <article
+            class="supporter-card"
+            id="ovtfan"
+        >
+
+            <img
+                src="images/mentions/ovtfan.png"
+                alt="Ovtfan supporter"
+                loading="lazy"
+            >
+
+        </article>
+        <article
+            class="supporter-card"
+            id="doughnuut"
+        >
+
+            <img
+                src="images/mentions/doughnuut.png"
+                alt="Doughnuut supporter"
+                loading="lazy"
+            >
+
+        </article>
+        <article
+            class="supporter-card"
+            id="nerdana"
+        >
+
+            <img
+                src="images/mentions/nerdana.png"
+                alt="Nerdana supporter"
+                loading="lazy"
+            >
+
+        </article>
+        <article
+            class="supporter-card"
+            id="nowitch"
+        >
+
+            <img
+                src="images/mentions/nowitch.png"
+                alt="Nowitch supporter"
+                loading="lazy"
+            >
+
+        </article>
+        <article
+            class="supporter-card"
+            id="dino"
+        >
+
+            <img
+                src="images/mentions/dino.png"
+                alt="Dino supporter"
+                loading="lazy"
+            >
+
+        </article>
+        <article
+            class="supporter-card"
+            id="dan"
+        >
+
+            <img
+                src="images/mentions/dan.png"
+                alt="Dan supporter"
+                loading="lazy"
+            >
+
+        </article>
+        <article
+            class="supporter-card"
+            id="panellball"
+        >
+
+            <img
+                src="images/mentions/panelball.png"
+                alt="Panellball supporter"
                 loading="lazy"
             >
 
@@ -656,8 +788,76 @@
             }
         );
 
+
+        /* =========================
+           AUDIO — START IMMEDIATELY
+           ========================= */
+
+        const AUDIO_VOLUME = 0.1;
+        const AUDIO_START_TIME = 0;
+
+        const audio =
+            document.getElementById("siteAudio");
+
+        const splashScreen =
+            document.getElementById("splashScreen");
+
+        const enterButton =
+            document.getElementById("enterButton");
+
+
+        audio.volume = AUDIO_VOLUME;
+        audio.currentTime = AUDIO_START_TIME;
+
+        // Keep the exact starting position from the second file.
+        audio.currentTime = AUDIO_START_TIME;
+
+        function startSiteAudio() {
+            audio.volume = AUDIO_VOLUME;
+
+            // Only reset if the browser has not already started it.
+            if (audio.paused) {
+                audio.play().catch(error => {
+                    // Browsers may block autoplay with sound until the
+                    // visitor interacts with the page.
+                    console.log("Autoplay was blocked:", error);
+                });
+            }
+        }
+
+        // Try as soon as the page is loaded.
+        window.addEventListener("DOMContentLoaded", startSiteAudio);
+
+        // Also try when returning to the page through browser navigation.
+        window.addEventListener("pageshow", startSiteAudio);
+
+        // If autoplay is blocked, the first interaction starts it.
+        ["pointerdown", "keydown", "touchstart"].forEach(eventName => {
+            window.addEventListener(eventName, startSiteAudio, {
+                once: true,
+                passive: true
+            });
+        });
+
     </script>
 
+
+
+    <!-- =========================
+         AUDIO
+    ========================= -->
+
+    <audio
+        id="siteAudio"
+        preload="auto"
+        autoplay
+        loop
+    >
+        <source
+            src="audio/songs/hotel_room.mp3"
+            type="audio/mp3"
+        >
+    </audio>
 
 </body>
 
